@@ -4,18 +4,6 @@
 
 using namespace std;
 
-void printFamily(Node  &node, Node &child){
-  for (int i = 0; i < node.getWorldState().size(); ++i)
-    cout << node.getWorldState()[i];
-
-  cout << "-->";
-
-  for (int i = 0; i < child.getWorldState().size(); ++i)
-    cout << child.getWorldState()[i];
-
-  cout << '\n';
-}
-
 int Node::getCost() {
   return this->cost;
 }

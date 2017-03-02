@@ -21,19 +21,6 @@ void printWorldStatus(Node * node){
   cout << '\n';
 }
 
-void printFrontier(){
-  for (int i = 0; i < frontier.size(); ++i){
-    printWorldStatus(frontier[i]);
-
-    if(frontier[i]->getParent() != nullptr){
-      cout << " -- parent ";
-      printWorldStatus(frontier[i]->getParent());
-    }
-    cout << endl;
-  }
-
-  cout << "------" << endl;
-}
 
 Node * extensionSearch(Node * root){
   // Check if node is the solution
