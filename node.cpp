@@ -1,5 +1,21 @@
 #include"node.h"
 
+#include<iostream>
+
+using namespace std;
+
+void printFamily(Node  &node, Node &child){
+  for (int i = 0; i < node.getWorldState().size(); ++i)
+    cout << node.getWorldState()[i];
+
+  cout << "-->";
+
+  for (int i = 0; i < child.getWorldState().size(); ++i)
+    cout << child.getWorldState()[i];
+
+  cout << '\n';
+}
+
 int Node::getCost() {
   return this->cost;
 }
@@ -48,9 +64,9 @@ std::vector<int> Node::getWorldState(){
   return this->worldState;
 }
 
-std::vector<Node> Node::buildSuccessors(){
+std::vector<Node *> Node::buildSuccessors(){
 
-  std::vector<Node> successors;
+  std::vector<Node *> successors;
 
   int shipSide = this->worldState[4];
 
@@ -68,8 +84,10 @@ std::vector<Node> Node::buildSuccessors(){
 
   for (unsigned int action = start; action <= end; ++action) {
     Node * candidate = new Node(this, static_cast<Action>(action));
-    if(candidate->isValid())
-      successors.push_back(*candidate);
+
+    if(candidate->isValid()){
+      successors.push_back(candidate);
+    }
   }
 
   return successors;

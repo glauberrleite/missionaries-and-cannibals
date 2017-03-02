@@ -4,18 +4,19 @@
 
 using namespace std;
 
-vector<Node> frontier;
+vector<Node *> frontier;
 
-bool isDuplicate(Node &node){
+bool isDuplicate(Node * node){
   for (int i = 0; i < frontier.size(); ++i)
-    if(node.getWorldState() == frontier[i].getWorldState())
+    if(node->getWorldState() == frontier[i]->getWorldState())
       return 1;
+
   return 0;
 }
 
-void printWorldStatus(Node &node){
-  for (int i = 0; i < node.getWorldState().size(); ++i)
-    cout << node.getWorldState()[i];
+void printWorldStatus(Node * node){
+  for (int i = 0; i < node->getWorldState().size(); ++i)
+    cout << node->getWorldState()[i];
 
   cout << '\n';
 }
@@ -23,29 +24,33 @@ void printWorldStatus(Node &node){
 void printFrontier(){
   for (int i = 0; i < frontier.size(); ++i){
     printWorldStatus(frontier[i]);
-    cout << " -- ";
-    printWorldStatus(*(frontier[i].getParent()));
+
+    if(frontier[i]->getParent() != nullptr){
+      cout << " -- parent ";
+      printWorldStatus(frontier[i]->getParent());
+    }
+    cout << endl;
   }
 
-  cout << "------\n";
+  cout << "------" << endl;
 }
 
-Node * extensionSearch(Node &root){
+Node * extensionSearch(Node * root){
   // Check if node is the solution
-  if (root.isSolution())
-    return &root;
+  if (root->isSolution())
+    return root;
 
   // Build successors
-  vector<Node> successors = root.buildSuccessors();
+  vector<Node *> successors = root->buildSuccessors();
 
-  for(int i = 0; i < successors.size(); ++i){
-    if(!isDuplicate(successors[i]))
+  for(int i = 0; i < successors.size(); ++i)
+    if(!isDuplicate(successors[i])){
       frontier.push_back(successors[i]);
-  }
+    }
 
   // removing the root from the frontier
   frontier.erase(frontier.begin());
-  printFrontier();
+
 
   // Choose who will be expanded
   return extensionSearch(frontier[0]);
@@ -54,7 +59,7 @@ Node * extensionSearch(Node &root){
 void printPath(Node * node){
   if(node != nullptr) {
 
-    printWorldStatus(*node);
+    printWorldStatus(node);
     cout << '\n';
 
     printPath(node->getParent());
@@ -65,14 +70,13 @@ int main(){
 
   // initial worldState = {3, 3, 0, 0, 0};
 
-  Node node(nullptr);
+  Node * node = new Node(nullptr);
 
   frontier.push_back(node);
 
   Node * result = extensionSearch(node);
 
-  printWorldStatus(*(result->getParent()));
-  //printPath(result);
+  printPath(result);
 
   cout << "--------\n";
   cout << "Total Depth: ";

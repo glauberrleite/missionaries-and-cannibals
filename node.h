@@ -3,13 +3,13 @@
 
 class Node {
   public:
-    Node(Node * parent, Action action = ML);
+    Node(Node * parent = nullptr, Action action = ML);
     int getCost();
     int getDepth();
     Node * getParent();
     bool isSolution();
     std::vector<int> getWorldState();
-    std::vector<Node> buildSuccessors();
+    std::vector<Node *> buildSuccessors();
     bool isValid();
   private:
     Node * parent;
